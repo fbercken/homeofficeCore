@@ -6,12 +6,16 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.hpe.ps.prototype.homeoffice.common.AppConfiguration;
 
 /**
  * This class is used to send the message on the status for the process to the Status Update queue. 
@@ -27,7 +31,11 @@ public class StatusUpdateProducer {
     private Producer<String, StatusUpdateMessage> producer;
 	
     private String statusUpdateTopic;
-
+    
+    public StatusUpdateProducer() {
+    	
+    	setConfiguration("/ipfix/statusupdate.conf");
+    }
     
     public StatusUpdateProducer(Producer<String, StatusUpdateMessage> producer, String statusUpdateTopic) {
     	
@@ -62,6 +70,7 @@ public class StatusUpdateProducer {
 		catch (Exception e) {
 			
 			log.error("Error when sending the status update message: {}", e.getMessage());
+			System.out.println("Error when sending the status update message:" + e.getMessage());
 			
 		}
     	finally {
@@ -109,6 +118,29 @@ public class StatusUpdateProducer {
         
         producer = new KafkaProducer<>(props);
 
+	}
+	
+    private void setConfiguration(String configPath) {
+		
+		try {
+			
+			Path config = Paths.get(configPath);
+	    	
+	    	AppConfiguration appConfiguration = new AppConfiguration(config);
+	    	
+	    	this.statusUpdateTopic = appConfiguration.getStatusUpdateTopic();
+	    	
+	    	log.info("Configuration parameters: {}", appConfiguration.toString());
+	    	
+	        System.out.println("Configuration parameters: " + appConfiguration.toString());
+			
+		}
+		catch (Exception e) {
+			
+			log.error("Error occurred: {}", e);	
+			
+		}
+		
 	}
 	
 }
