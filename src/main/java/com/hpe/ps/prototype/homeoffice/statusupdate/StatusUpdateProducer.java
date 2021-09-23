@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.hpe.ps.prototype.homeoffice.common.AppConfiguration;
+import com.hpe.ps.prototype.homeoffice.serializer.JsonSerializer;
 
 /**
  * This class is used to send the message on the status for the process to the Status Update queue. 
@@ -114,7 +115,7 @@ public class StatusUpdateProducer {
                 "org.apache.kafka.common.serialization.StringSerializer");
         
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
-        		  StatusUpdateSerializer.class.getName());
+        		  "com.hpe.ps.prototype.homeoffice.serializer.JsonSerializer");
         
         producer = new KafkaProducer<>(props);
 
