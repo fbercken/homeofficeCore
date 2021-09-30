@@ -127,13 +127,13 @@ public class StatusUpdateProducer {
 			
 			Path config = Paths.get(configPath);
 	    	
-	    	AppConfiguration appConfiguration = new AppConfiguration(config);
+			StatusUpdateConfiguration statusUpdateConfiguration = new StatusUpdateConfiguration(config);
 	    	
-	    	this.statusUpdateTopic = appConfiguration.getStatusUpdateTopic();
+	    	this.statusUpdateTopic = statusUpdateConfiguration.getStatusUpdateTopic();
 	    	
-	    	log.info("Configuration parameters: {}", appConfiguration.toString());
+	    	log.info("Configuration parameters: {}", statusUpdateConfiguration.toString());
 	    	
-	        System.out.println("Configuration parameters: " + appConfiguration.toString());
+	        System.out.println("Configuration parameters: " + statusUpdateConfiguration.toString());
 			
 		}
 		catch (Exception e) {

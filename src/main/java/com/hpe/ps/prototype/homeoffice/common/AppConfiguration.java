@@ -1,10 +1,10 @@
 package com.hpe.ps.prototype.homeoffice.common;
 
 
-import java.net.*;
-
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,9 +14,10 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 
+import java.net.URI;
 
 import net.minidev.json.parser.JSONParser;
-import net.minidev.json.*;
+import net.minidev.json.JSONObject;
 
 /**
  * The Application Configuration stored in HDFS.
@@ -25,14 +26,13 @@ import net.minidev.json.*;
  * the application, containing configuration items used by the program.
  */
 
-public class AppConfiguration {
+public abstract class AppConfiguration {
 	 
-	private static final Logger log = LoggerFactory.getLogger(AppConfiguration.class);
+    private static final Logger log = LoggerFactory.getLogger(AppConfiguration.class);
+    
 	
-	 private final String statusUpdateTopic;
-	 
-     public AppConfiguration(Path config) throws Exception {
-		  
+    public AppConfiguration(Path config) throws Exception {
+     
 	    if (!config.isAbsolute()) {
 	    	
 	        log.error("Config file '%s' must be specified with an absolute path", config.toString());
@@ -77,34 +77,11 @@ public class AppConfiguration {
 	    
 	    JSONObject jsonObject = (JSONObject)parser.parse( buffer.toString() );
 
-        if (!jsonObject.containsKey("statusupdate_topic")) {
-	    	
-	        throw new IllegalArgumentException(
-        	    	  String.format("config object at maprfs://%s lacks statusupdate_topic entry", app_config ) );
+        setConfig(jsonObject, app_config);
 	    
-	    } 
-	    else {
-	    	
-	      this.statusUpdateTopic = (String)jsonObject.get("statusupdate_topic");
-	    }
-	  }
+   }
      
-      
-     public String getStatusUpdateTopic() {
-		  
-		  return statusUpdateTopic;
-	  }
-        
-     
-	  public String toString() {
-	    
-		StringBuilder builder = new StringBuilder();
-	    
-		builder.append("AppConfig(");
-	    builder.append(" statusupdate_topic = ").append(statusUpdateTopic);
-	    builder.append(" )");
-	    
-	    return builder.toString();
-	  }
-	
+   public abstract void setConfig(JSONObject jsonObject, org.apache.hadoop.fs.Path appConfig);
+   
+    
 }
