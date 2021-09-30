@@ -4,15 +4,14 @@ package com.hpe.ps.prototype.homeoffice.common;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.Path;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.Path;
 
 import java.net.URI;
 
@@ -31,7 +30,7 @@ public abstract class AppConfiguration {
     private static final Logger log = LoggerFactory.getLogger(AppConfiguration.class);
     
 	
-    public AppConfiguration(Path config) throws Exception {
+    public AppConfiguration(java.nio.file.Path config) throws Exception {
      
 	    if (!config.isAbsolute()) {
 	    	
@@ -44,11 +43,11 @@ public abstract class AppConfiguration {
 
 	    String hadoop_version = Files.readString( Paths.get( "/opt/mapr/hadoop/hadoopversion" ) );
 
-	    org.apache.hadoop.fs.Path core_config = new org.apache.hadoop.fs.Path(
+	     Path core_config = new Path(
 	      String.format("file:///opt/mapr/hadoop/hadoop-%s/etc/hadoop/core-site.xml",
 	        hadoop_version) );
 	 
-	    org.apache.hadoop.fs.Path hdfs_config = new org.apache.hadoop.fs.Path(
+	    Path hdfs_config = new Path(
 	      String.format("file:///opt/mapr/hadoop/hadoop-%s/etc/hadoop/hdfs-site.xml",
 	        hadoop_version) );
 	 
@@ -60,7 +59,7 @@ public abstract class AppConfiguration {
 
 	    FileSystem file_system = FileSystem.get(URI.create( "maprfs:///"), conf );
 
-	    org.apache.hadoop.fs.Path app_config = new org.apache.hadoop.fs.Path(
+	    Path app_config = new Path(
 	      config.toString() );
 
 	    FSDataInputStream in_stream = file_system.open(app_config);
@@ -77,11 +76,11 @@ public abstract class AppConfiguration {
 	    
 	    JSONObject jsonObject = (JSONObject)parser.parse( buffer.toString() );
 
-        setConfig(jsonObject, app_config);
+        setConfig(jsonObject, app_config.toString());
 	    
    }
      
-   public abstract void setConfig(JSONObject jsonObject, org.apache.hadoop.fs.Path appConfig);
+   public abstract void setConfig(JSONObject jsonObject, String appConfig);
    
     
 }

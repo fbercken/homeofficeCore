@@ -21,7 +21,7 @@ public class StatusUpdateConfiguration extends AppConfiguration {
 	}
 	 
 
-    public void setConfig(JSONObject jsonObject, org.apache.hadoop.fs.Path appConfig) {
+    public void setConfig(JSONObject jsonObject, String appConfig) {
     	
 	    if (!jsonObject.containsKey("statusupdate_topic")) {
 		    	
