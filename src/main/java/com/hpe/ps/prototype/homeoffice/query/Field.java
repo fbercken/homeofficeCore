@@ -36,10 +36,9 @@ import java.util.Optional;
 	
 	  public static Optional<Field> forString( Table table, String value ) {
 	    if ( table == null || value == null ) { return Optional.empty(); }
-	    /* String lookup = value.toLowerCase();
+	    String lookup = value.toLowerCase();
 	    return fields.get( table ).stream()
-	      .filter( (field) -> field.name.equals(lookup) ).findFirst(); */
-		  return Optional.of(Field.valueOf(value));
+	      .filter( (field) -> field.name.equals(lookup) ).findFirst();
 	  }
 	
 	  private final Table table;

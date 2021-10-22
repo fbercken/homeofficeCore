@@ -1,0 +1,39 @@
+package com.hpe.ps.prototype.homeoffice.test.query;
+/* vim:set ft=java ts=2 et sw=2 colorcolumn=80: */
+
+import com.hpe.ps.prototype.homeoffice.query.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+public class FieldTestChoudaryTest {
+
+    @Test
+    public void test_lookup_of_null() {
+        Assertions.assertEquals(
+                Optional.empty(), Field.forString(null, null ),
+                String.format( "lookup of (null, null) returns %s", Optional.empty() ) );
+    }
+
+    @Test
+    public void test_lookup_of_field_null() {
+        Assertions.assertEquals(
+                Optional.empty(), Field.forString(Table.IPFIX, null ),
+                String.format( "lookup of (Table.IPFIX, null) returns %s", Optional.empty() ) );
+    }
+
+    @Test
+    public void test_lookup_of_field_nonsense() {
+        Assertions.assertEquals(
+                Optional.empty(), Field.forString(Table.IPFIX, "hghjgjhgj" ),
+                String.format( "lookup of (Table.IPFIX, 'hghjgjhgj') returns %s", Optional.empty() ) );
+    }
+
+    @Test
+    public void test_lookup_of_field_time() {
+        Assertions.assertEquals(
+                Optional.of(Field.IPFIX_TIME), Field.forString(Table.IPFIX, "time" ),
+                String.format( "lookup of (Table.IPFIX, 'time') returns %s", Field.IPFIX_TIME ) );
+    }
+}
