@@ -122,26 +122,13 @@ public class StatusUpdateProducer {
 	}
 	
     private void setConfiguration(String configPath) {
-		
 		try {
-			
 			Path config = Paths.get(configPath);
-	    	
 	    	AppConfiguration appConfiguration = new AppConfiguration(config);
-	    	
-	    	this.statusUpdateTopic = appConfiguration.getStatusUpdateTopic();
-	    	
+	    	this.statusUpdateTopic = appConfiguration.getConfigValue("statusupdate_topic");
 	    	log.info("Configuration parameters: {}", appConfiguration.toString());
-	    	
-	        System.out.println("Configuration parameters: " + appConfiguration.toString());
-			
+		} catch (Exception e) {
+			log.error("Error occurred: {}", e);
 		}
-		catch (Exception e) {
-			
-			log.error("Error occurred: {}", e);	
-			
-		}
-		
 	}
-	
 }
